@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "improvement-form-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/improvementForm/ImprovementFormWebPart.js",
+          "manifest": "./src/webparts/improvementForm/ImprovementFormWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "ImprovementFormWebPartStrings": "lib/webparts/improvementForm/loc/{locale}.js"
+  }
+}
