@@ -9,8 +9,9 @@ import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { IReadonlyTheme } from '@microsoft/sp-component-base';
 
 import * as strings from 'ImprovementFormWebPartStrings';
-import ImprovementForm from './components/ImprovementForm';
+import test_improvementform from './components/test_improvementform';
 import { IImprovementFormProps } from './components/IImprovementFormProps';
+
 
 export interface IImprovementFormWebPartProps {
   description: string;
@@ -18,18 +19,13 @@ export interface IImprovementFormWebPartProps {
 
 export default class ImprovementFormWebPart extends BaseClientSideWebPart<IImprovementFormWebPartProps> {
 
-  private _isDarkTheme: boolean = false;
-  private _environmentMessage: string = '';
-
   public render(): void {
     const element: React.ReactElement<IImprovementFormProps> = React.createElement(
-      ImprovementForm,
+      test_improvementform,
       {
         description: this.properties.description,
-        isDarkTheme: this._isDarkTheme,
-        environmentMessage: this._environmentMessage,
-        hasTeamsContext: !!this.context.sdks.microsoftTeams,
-        userDisplayName: this.context.pageContext.user.displayName
+        webURL: this.context.pageContext.web.absoluteUrl,
+        context: this.context
       }
     );
 
