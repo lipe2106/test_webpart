@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IImprovementFormProps } from './IImprovementFormProps';
-import {PeoplePicker, PrincipalType} from '@pnp/spfx-controls-react/lib/PeoplePicker';
+import styles from './ImprovementForm.module.scss';
 import {TextField} from 'office-ui-fabric-react/lib/TextField';
 import {Label} from 'office-ui-fabric-react/lib/Label';
 import {Web} from '@pnp/sp/presets/all';
@@ -9,13 +9,10 @@ import '@pnp/sp/items';
 import {PrimaryButton} from 'office-ui-fabric-react/lib/Button';
 
 export interface IStates {
-    Items: any;
-    ID: any;
-    EmployeeName: any;
-    EmployeeNameId: any;
-    Date: any;
     Title: any;
     Description: any;
+    Site: any;
+    Contact: any;
 }
 
 export default class test_improvementform extends React.Component<IImprovementFormProps, 
@@ -23,85 +20,83 @@ IStates> {
     constructor(props: any) {
         super(props);
         this.state = {
-            Items: [],
-            EmployeeName: "",
-            EmployeeNameId: 0,
-            ID: 0,
-            Date: null,
             Title: "",
-            Description: ""
+            Description: "",
+            Site: "",
+            Contact: ""
         };
     }
 
-    public _getPeoplePickerItems = async (items:any[]) => {
 
-        if(items.length > 0) {
-            this.setState({EmployeeName:items[0].text});
-            this.setState({EmployeeNameId:items[0].id});
-        }
-        else {
-            //ID = 0;
-            this.setState({EmployeeNameId: ""});
-            this.setState({EmployeeName: ""});
-        }
+    public onchange(value: any, stateValue: any): void {
+        let state: any = {};
+        state[stateValue] = value;
+        this.setState(state);
     }
-
-  //  public onchange(value, stateValue) {
-   //     let state = {};
-   //     state[stateValue] = value;
-   //     this.setState(state);
-   // }
 
     private async SubmitImprovement() {
         let web = Web(this.props.webURL);
         await web.lists.getByTitle("Intranet Improvements").items.add({
-            Employee_x0020_NameId:this.state.EmployeeNameId,
-            Date: new Date(this.state.Date),
             Title: this.state.Title,
             Description: this.state.Description,
+            Site: this.state.Site,
+            Contact: this.state.Contact
         }).then(i => {
             console.log(i);
         });
         alert("Improvement submitted");
-        this.setState({EmployeeName:"", Date:null, Title:"", Description:""});
+        this.setState({Title:"", Description:"", Site: "", Contact: ""});
     }
 
     public render(): React.ReactElement<IImprovementFormProps> {
         return(
             <div>
                 <h1>Test Improvement Form</h1>
+                <p>Anything on the new intranet in need of an update, part of the page not working or something doesn't feel logical? Please send in an improvement suggestion and we will have a look. Thank you!</p>
                 <form>
                     <div>
                         <Label>Title</Label>
                         <TextField
                             value={this.state.Title}
-                            //multiline onChanged={(value) => this.onchange(value, "Title")}
+                            placeholder='Title of your suggestion'
+                            onChange={(value) => this.onchange(value, "Title")}
                         />
+                        <p></p>
                     </div>
                     <div>
                         <Label>Description</Label>
                         <TextField
                             value={this.state.Description}
-                            //multiline onChanged={(value) => this.onchange(value, "Description")}
+                            placeholder='Description of the improvement suggestion'
+                            multiline
+                            onChange={(value) => this.onchange(value, "Deskription")}
                         />
+                        <p></p>
                     </div>
                     <div>
-                        <Label>Your name</Label>
-                        <PeoplePicker
-                            context={this.props.context}
-                            personSelectionLimit={1}
-                            // defaultSelectedUsers={this.state.EmployeeName===""?[]:this.state.EmployeeName}
-                            required={false}
-                            onChange={this._getPeoplePickerItems}
-                            defaultSelectedUsers={[this.state.EmployeeName?this.state.EmployeeName:""]}
-                            showHiddenInUI={false}
-                            principalTypes={[PrincipalType.User]}
-                            resolveDelay={1000}
-                            ensureUser={true}
+                        <Label>Site URL</Label>
+                        <TextField
+                            value={this.state.Site}
+                            placeholder="Site URL to the page that's in need of improvement"
+                            onChange={(value) => this.onchange(value, "Site URL")}
                         />
+                        <p></p>
                     </div>
                     <div>
-                        <PrimaryButton text="Submit" onClick={() => this.SubmitImprovement()}/>
+                        <Label>Contact Information</Label>
+                        <TextField
+                            value={this.state.Contact}
+                            placeholder='Your name or email as contact information if we have further questions'
+                            onChange={(value) => this.onchange(value, "Contact Information")}
+                        />
+                        <p></p>
+                    </div>
+                    <div>
+                        <p></p>
+                        <PrimaryButton className={styles.submitBtn} text="Submit" onClick={() => this.SubmitImprovement()}/>
+                    </div>
+                    <div>
+                        <p>Here will the message appear</p>
                     </div>
                 </form>
             </div>
