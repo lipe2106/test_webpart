@@ -1,12 +1,9 @@
 import * as React from 'react';
-import styles from './ImprovementForm.module.scss';
 import { IImprovementFormProps } from './IImprovementFormProps';
-import {escape} from '@microsoft/sp-lodash-subset';
-import {DatePicker, IDatePickerStrings} from 'office-ui-fabric-react/lib/DatePicker';
 import {PeoplePicker, PrincipalType} from '@pnp/spfx-controls-react/lib/PeoplePicker';
 import {TextField} from 'office-ui-fabric-react/lib/TextField';
 import {Label} from 'office-ui-fabric-react/lib/Label';
-import {sp,Web,IWeb} from '@pnp/sp/presets/all';
+import {Web} from '@pnp/sp/presets/all';
 import '@pnp/sp/lists';
 import '@pnp/sp/items';
 import {PrimaryButton} from 'office-ui-fabric-react/lib/Button';
@@ -19,12 +16,11 @@ export interface IStates {
     Date: any;
     Title: any;
     Description: any;
-    HTML: any;
 }
 
 export default class test_improvementform extends React.Component<IImprovementFormProps, 
 IStates> {
-    constructor(props) {
+    constructor(props: any) {
         super(props);
         this.state = {
             Items: [],
@@ -33,8 +29,7 @@ IStates> {
             ID: 0,
             Date: null,
             Title: "",
-            Description: "",
-            HTML: []
+            Description: ""
         };
     }
 
@@ -51,11 +46,11 @@ IStates> {
         }
     }
 
-    public onchange(value, stateValue) {
-        let state = {};
-        state[stateValue] = value;
-        this.setState(state);
-    }
+  //  public onchange(value, stateValue) {
+   //     let state = {};
+   //     state[stateValue] = value;
+   //     this.setState(state);
+   // }
 
     private async SubmitImprovement() {
         let web = Web(this.props.webURL);
@@ -75,20 +70,19 @@ IStates> {
         return(
             <div>
                 <h1>Test Improvement Form</h1>
-                {this.state.HTML}
                 <form>
                     <div>
                         <Label>Title</Label>
                         <TextField
                             value={this.state.Title}
-                            multiline onChange={(value) => this.onchange(value, "Title")}
+                            //multiline onChanged={(value) => this.onchange(value, "Title")}
                         />
                     </div>
                     <div>
                         <Label>Description</Label>
                         <TextField
                             value={this.state.Description}
-                            multiline onChanged={(value) => this.onchange(value, "Description")}
+                            //multiline onChanged={(value) => this.onchange(value, "Description")}
                         />
                     </div>
                     <div>

@@ -34,7 +34,7 @@ export default class ImprovementFormWebPart extends BaseClientSideWebPart<IImpro
 
   protected onInit(): Promise<void> {
     return this._getEnvironmentMessage().then(message => {
-      this._environmentMessage = message;
+    //  this._environmentMessage = message;
     });
   }
 
@@ -71,7 +71,7 @@ export default class ImprovementFormWebPart extends BaseClientSideWebPart<IImpro
       return;
     }
 
-    this._isDarkTheme = !!currentTheme.isInverted;
+  //  this._isDarkTheme = !!currentTheme.isInverted;
     const {
       semanticColors
     } = currentTheme;
