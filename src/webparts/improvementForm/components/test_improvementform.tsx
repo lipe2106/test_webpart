@@ -24,15 +24,22 @@ IStates> {
             Description: "",
             Site: "",
             Contact: ""
-        };
+        }
+
+        this.onchange = this.onchange.bind(this);
     }
 
-
-    public onchange(value: any, stateValue: any): void {
-        let state: any = {};
-        state[stateValue] = value;
+    public onchange(e: any) {
+        let state : any = {}
+        state[e.target.id] = e.target.value;
         this.setState(state);
     }
+
+    //public onchange(value : any, stateValue : any) {
+    //    let state : any = {};
+    //    state[stateValue] = value;
+    //    this.setState(state);
+    //}
 
     private async SubmitImprovement() {
         let web = Web(this.props.webURL);
@@ -58,8 +65,9 @@ IStates> {
                         <Label>Title</Label>
                         <TextField
                             value={this.state.Title}
+                            id="Title"
                             placeholder='Title of your suggestion'
-                            onChange={(value) => this.onchange(value, "Title")}
+                           onChange={this.onchange}
                         />
                         <p></p>
                     </div>
@@ -67,9 +75,10 @@ IStates> {
                         <Label>Description</Label>
                         <TextField
                             value={this.state.Description}
+                            id="Description"
                             placeholder='Description of the improvement suggestion'
                             multiline
-                            onChange={(value) => this.onchange(value, "Deskription")}
+                            onChange={(e) => this.onchange(e)}
                         />
                         <p></p>
                     </div>
@@ -77,8 +86,9 @@ IStates> {
                         <Label>Site URL</Label>
                         <TextField
                             value={this.state.Site}
+                            id="Site"
                             placeholder="Site URL to the page that's in need of improvement"
-                            onChange={(value) => this.onchange(value, "Site URL")}
+                            onChange={(e) => this.onchange(e)}
                         />
                         <p></p>
                     </div>
@@ -86,8 +96,9 @@ IStates> {
                         <Label>Contact Information</Label>
                         <TextField
                             value={this.state.Contact}
+                            id="Contact"
                             placeholder='Your name or email as contact information if we have further questions'
-                            onChange={(value) => this.onchange(value, "Contact Information")}
+                            onChange={(e) => this.onchange(e)}
                         />
                         <p></p>
                     </div>
