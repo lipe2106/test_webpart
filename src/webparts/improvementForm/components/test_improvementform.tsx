@@ -27,6 +27,7 @@ IStates> {
         }
 
         this.onchange = this.onchange.bind(this);
+        this.submit = this.submit.bind(this);
     }
 
     public onchange(e: any) {
@@ -41,7 +42,8 @@ IStates> {
     //    this.setState(state);
     //}
 
-    private async SubmitImprovement() {
+    private async submit(e: any) {
+        e.preventDefault();
         let web = Web(this.props.webURL);
         await web.lists.getByTitle("Intranet Improvements").items.add({
             Title: this.state.Title,
@@ -104,7 +106,7 @@ IStates> {
                     </div>
                     <div>
                         <p></p>
-                        <PrimaryButton className={styles.submitBtn} text="Submit" onClick={() => this.SubmitImprovement()}/>
+                        <PrimaryButton className={styles.submitBtn}  onClick={(e) => this.submit(e)} text="Submit" />
                     </div>
                     <div>
                         <p>Here will the message appear</p>
@@ -113,4 +115,4 @@ IStates> {
             </div>
         );
     }
-};
+}
