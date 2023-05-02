@@ -6,6 +6,7 @@ import {Label} from 'office-ui-fabric-react/lib/Label';
 import {Web} from '@pnp/sp/presets/all';
 import '@pnp/sp/lists';
 import '@pnp/sp/items';
+import "@pnp/sp/items/get-all";
 import {PrimaryButton} from 'office-ui-fabric-react/lib/Button';
 
 export interface IStates {
@@ -13,6 +14,7 @@ export interface IStates {
     Description: any;
     Site: any;
     Contact: any;
+    Search: any;
 }
 
 export default class test_improvementform extends React.Component<IImprovementFormProps, 
@@ -23,7 +25,8 @@ IStates> {
             Title: "",
             Description: "",
             Site: "",
-            Contact: ""
+            Contact: "",
+            Search: ""
         }
 
         this.onchange = this.onchange.bind(this);
@@ -36,14 +39,13 @@ IStates> {
         this.setState(state);
     }
 
-    //public onchange(value : any, stateValue : any) {
-    //    let state : any = {};
-    //    state[stateValue] = value;
-    //    this.setState(state);
-    //}
-
     private async submit(e: any) {
         e.preventDefault();
+        console.log("Hej från submit!");
+        console.log("Titel:" + this.state.Title)
+        console.log("Description:" + this.state.Description)
+        console.log("Site:" + this.state.Site)
+        console.log("Contact:" + this.state.Contact)
         let web = Web(this.props.webURL);
         await web.lists.getByTitle("Intranet Improvements").items.add({
             Title: this.state.Title,
@@ -55,6 +57,19 @@ IStates> {
         });
         alert("Improvement submitted");
         this.setState({Title:"", Description:"", Site: "", Contact: ""});
+    }
+
+    private async get(e: any){
+        e.preventDefault();
+        console.log("Hej från getAll");
+        let web = Web(this.props.webURL);
+        await web.lists.getByTitle("Intranet Improvements").items.getAll().then((response: any) => {
+            console.log(response);
+        
+    })}
+
+    private async redirect() {
+        window.open("http://app02.borgwarner.com/ShareDocs/Search/Pages/Docs.aspx?k=DlcDocId:" + this.state.Search + "&s=ShareDocs");
     }
 
     public render(): React.ReactElement<IImprovementFormProps> {
@@ -109,9 +124,25 @@ IStates> {
                         <PrimaryButton className={styles.submitBtn}  onClick={(e) => this.submit(e)} text="Submit" />
                     </div>
                     <div>
+                        <p></p>
+                        <PrimaryButton className={styles.submitBtn}  onClick={(e) => this.get(e)} text="Get" />
+                    </div>
+                    <div>
+                        <p></p>
+                        <Label>Search</Label>
+                        <TextField
+                            value={this.state.Search}
+                            id="Search"
+                            placeholder='Search'
+                            onChange={(e) => this.onchange(e)}
+                        />
+                        <PrimaryButton className={styles.submitBtn}  onClick={(e) => this.redirect()} text="Redirect" />
+                    </div>
+                    <div>
                         <p>Here will the message appear</p>
                     </div>
                 </form>
+                
             </div>
         );
     }
