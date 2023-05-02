@@ -15,6 +15,8 @@ export interface IStates {
     Site: any;
     Contact: any;
     Search: any;
+    DlcDocId: any;
+    Selected: any;
 }
 
 export default class test_improvementform extends React.Component<IImprovementFormProps, 
@@ -26,7 +28,9 @@ IStates> {
             Description: "",
             Site: "",
             Contact: "",
-            Search: ""
+            Search: "",
+            DlcDocId: "",
+            Selected: ""
         }
 
         this.onchange = this.onchange.bind(this);
@@ -36,6 +40,12 @@ IStates> {
     public onchange(e: any) {
         let state : any = {}
         state[e.target.id] = e.target.value;
+        this.setState(state);
+    }
+
+    public selected(e: any) {
+        let state : any = {}
+        state["Selected"] = e.target["value"];
         this.setState(state);
     }
 
@@ -69,7 +79,7 @@ IStates> {
     })}
 
     private async redirect() {
-        window.open("http://app02.borgwarner.com/ShareDocs/Search/Pages/Docs.aspx?k=DlcDocId:" + this.state.Search + "&s=ShareDocs");
+        window.open("http://app02.borgwarner.com/ShareDocs/Search/Pages/Docs.aspx?k=" + this.state.Selected + ":" + this.state.Search + "&s=ShareDocs");
     }
 
     public render(): React.ReactElement<IImprovementFormProps> {
@@ -130,6 +140,10 @@ IStates> {
                     <div>
                         <p></p>
                         <Label>Search</Label>
+                        <select onChange={(e) => this.selected(e)}>
+                            <option id="DlcDocId" value="DlcDocId">Document ID</option>
+                            <option id="Title" value="Title">Title</option>
+                        </select>
                         <TextField
                             value={this.state.Search}
                             id="Search"
