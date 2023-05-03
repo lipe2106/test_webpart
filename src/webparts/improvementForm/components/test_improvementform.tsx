@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { IImprovementFormProps } from './IImprovementFormProps';
 import styles from './ImprovementForm.module.scss';
-import {TextField} from 'office-ui-fabric-react/lib/TextField';
-import {Label} from 'office-ui-fabric-react/lib/Label';
-import {PrimaryButton} from 'office-ui-fabric-react/lib/Button';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 
 export interface IStates {
     Search: any;
     Selected: any;
+    Message: any;
 }
 
 export default class test_improvementform extends React.Component<IImprovementFormProps, 
@@ -16,7 +16,8 @@ IStates> {
         super(props);
         this.state = {
             Search: "",
-            Selected: ""
+            Selected: "",
+            Message: ""
         }
 
         this.selected = this.selected.bind(this);
@@ -37,34 +38,50 @@ IStates> {
     }
 
     private async search() {
-        window.open("http://app02.borgwarner.com/ShareDocs/Search/Pages/Docs.aspx?k=" + this.state.Selected + ":" + this.state.Search + "&s=ShareDocs");
+        if(this.state.Search == "") {
+            console.log("Du måste skriva något");
+            alert("You need to enter text in searchbar to be able to search");
+        } else {
+            window.open("http://app02.borgwarner.com/ShareDocs/Search/Pages/Docs.aspx?k=" + this.state.Selected + ":" + this.state.Search + "&s=ShareDocs");
+        }
     }
 
     public render(): React.ReactElement<IImprovementFormProps> {
         return(
             <div>
-                <h1>Test Improvement Form</h1>
                 <form>
-                    <div>
-                        <p></p>
-                        <Label>Search</Label>
-                        <select onChange={(e) => this.selected(e)}>
-                            <option disabled selected>Filter search</option>
-                            <option id="DlcDocId" value="DlcDocId">Document ID</option>
-                            <option id="Title" value="Title">Title</option>
-                            <option id="Unfilter" value="">Search without filter</option>
-                        </select>
-                        <TextField
-                            value={this.state.Search}
-                            id="Search"
-                            placeholder='Search'
-                            onChange={(e) => this.onchange(e)}
-                        />
-                        <PrimaryButton className={styles.submitBtn}  onClick={(e) => this.search()} text="Search" />
-                    </div>
-                    <div>
-                        <p>Here will the message appear</p>
-                    </div>
+                    <fieldset className={styles.searchForm}>
+                        <legend>Search in ShareDocs</legend>
+                        <div>
+                            <div className={styles.gridcontainer}>
+                                <TextField
+                                    value={this.state.Search}
+                                    id="Search"
+                                    placeholder='Enter free text or filter search'
+                                    onChange={(e) => this.onchange(e)}
+                                />
+                                <select onChange={(e) => this.selected(e)} className={styles.dropdown}>
+                                    <option value="" selected>No Filter</option>
+                                    <option id="Author" value="Author">Author</option>
+                                    <option id="Company" value="Company">Company</option>
+                                    <option id="Customer" value="Customer">Customer</option>
+                                    <option id="DlcDocId" value="DlcDocId">Document ID</option>
+                                    <option id="FileName" value="FileName">File Name</option>
+                                    <option id="IssuedBy" value="IssuedBy">Issued By</option>
+                                    <option id="Project" value="Project">Project</option>
+                                    <option id="Supplier" value="Supplier">Supplier</option>
+                                    <option id="Title" value="Title">Title</option>
+                                </select>
+                            </div>
+                            <PrimaryButton className={styles.searchBtn}  onClick={(e) => this.search()}>
+                                <img src={require('../assets/searchIcon.png')} alt="search icon" />
+                                Search in ShareDocs
+                            </PrimaryButton>
+                        </div>
+                        <div>
+                            <p>{this.state.Message}</p>
+                        </div>
+                    </fieldset>
                 </form>
             </div>
         );
