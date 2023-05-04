@@ -6,11 +6,14 @@ import {
   PropertyPaneTextField
 } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
-import { IReadonlyTheme } from '@microsoft/sp-component-base';
 
 import * as strings from 'ImprovementFormWebPartStrings';
 import test_improvementform from './components/test_improvementform';
 import { IImprovementFormProps } from './components/IImprovementFormProps';
+
+import { IReadonlyTheme,
+} from "@microsoft/sp-component-base";
+import { getSP } from '../../pnpjsConfig';
 
 
 export interface IImprovementFormWebPartProps {
@@ -19,12 +22,18 @@ export interface IImprovementFormWebPartProps {
 
 export default class ImprovementFormWebPart extends BaseClientSideWebPart<IImprovementFormWebPartProps> {
 
+  private _isDarkTheme: boolean = false;
+  private _environmentMessage: string = '';
+
   public render(): void {
     const element: React.ReactElement<IImprovementFormProps> = React.createElement(
       test_improvementform,
       {
         description: this.properties.description,
-        webURL: this.context.pageContext.web.absoluteUrl,
+        isDarkTheme: this._isDarkTheme,
+        environmentMessage: this._environmentMessage,
+        hasTeamsContext: !!this.context.sdks.microsoftTeams,
+        userDisplayName: this.context.pageContext.user.displayName,
         context: this.context
       }
     );
@@ -32,13 +41,13 @@ export default class ImprovementFormWebPart extends BaseClientSideWebPart<IImpro
     ReactDom.render(element, this.domElement);
   }
 
-  protected onInit(): Promise<void> {
+  public async onInit(): Promise<void> {
     return this._getEnvironmentMessage().then(message => {
-    //  this._environmentMessage = message;
+      this._environmentMessage = message;
+
+      getSP(this.context);
     });
   }
-
-
 
   private _getEnvironmentMessage(): Promise<string> {
     if (!!this.context.sdks.microsoftTeams) { // running in Teams, office.com or Outlook
@@ -71,7 +80,7 @@ export default class ImprovementFormWebPart extends BaseClientSideWebPart<IImpro
       return;
     }
 
-  //  this._isDarkTheme = !!currentTheme.isInverted;
+    this._isDarkTheme = !!currentTheme.isInverted;
     const {
       semanticColors
     } = currentTheme;
@@ -114,3 +123,5 @@ export default class ImprovementFormWebPart extends BaseClientSideWebPart<IImpro
     };
   }
 }
+
+

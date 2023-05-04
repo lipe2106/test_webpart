@@ -33,35 +33,14 @@
   }
 }
 
-.searchForm {
-  padding: 3%;
-}
-
-.gridcontainer {
-  display: grid;
-  grid-template-columns: 70% 28%;
-  justify-content: space-between;
-}
-
-.dropdown {
-  padding-left: 3%;
-}
-
-.searchBtn {
+.submitBtn {
   background-color: rgb(12, 126, 113);
+  color: white;
   border: none;
   border-radius: 3px;
-  margin-top: 3%;
-  padding: 2.5%;
-  padding-left: 0%;
-  text-align: left;
-  width: 40%;
-  img {
-    align-items: left;
-    margin-right: 2%;
-    margin-left: 0%;
-  }
-  @media(max-width: 600px ) {
-    width: 100%;
-  }
+  width: 200px;
+  height: 35px;
+  margin-top: 2.5%;
 }
+
+
