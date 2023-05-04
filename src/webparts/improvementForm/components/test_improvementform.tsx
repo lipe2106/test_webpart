@@ -22,7 +22,12 @@ const Form = (props:IImprovementFormProps) => {
     const [formItems, setFormItems] = useState<ImprovementForm[]>([])
 
     const getFormItems = async () => {
+
+        console.log("Context: ", _sp);
+
         const items = _sp.web.lists.getByTitle(LIST_NAME).items();
+
+        console.log("Form items: ", items)
 
         setFormItems((await items).map((item: any) => {
             return {
@@ -34,9 +39,23 @@ const Form = (props:IImprovementFormProps) => {
         }));
     }
 
+    const submit = async (e: any) => {
+        e.preventDefault();
+        console.log("Hej från submit!");
+        await _sp.web.lists.getByTitle("Intranet").items.add({
+            Title: "Nytt test",
+            Description: "Ny beskr",
+            Site: "Ny site",
+            Contact: "Test"
+        }).then(i => {
+            console.log(i);
+        });
+        alert("Improvement submitted");
+    }
+
     useEffect(() => {
         getFormItems();
-    })
+    },[]);
 
     return(
         <div>
@@ -87,7 +106,7 @@ const Form = (props:IImprovementFormProps) => {
                 </div>
                 <div>
                     <p></p>
-                <PrimaryButton className={styles.submitBtn}  /*onClick={(e) => this.submit(e)}*/ text="Submit" />
+                <PrimaryButton className={styles.submitBtn}  onClick={(e) => submit(e)} text="Submit" />
                 </div>
             </form>
             
