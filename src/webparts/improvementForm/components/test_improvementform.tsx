@@ -15,7 +15,7 @@ import {PrimaryButton} from 'office-ui-fabric-react/lib/Button';
 
 const Form = (props:IImprovementFormProps) => {
 
-    const LIST_NAME = "Intranet";
+    const LIST_NAME = "Intranet_Improvements";
     let _sp: SPFI = getSP(props.context);
 
     const [title, setTitle] = useState("");
@@ -25,24 +25,24 @@ const Form = (props:IImprovementFormProps) => {
 
     const submit = async (e: any) => {
         e.preventDefault();
-        console.log("Hej från submit!");
-        console.log("Title: " + title);
-        console.log("Descr: " + description);
-        console.log("Site: " + site);
-        console.log("Contact: " + contact);
-        await _sp.web.lists.getByTitle(LIST_NAME).items.add({
-            Title : title,
-            Description: description,
-            Site: site,
-            Contact: contact
-        }).then(i => {
-            console.log(i);
-        });
-        alert("Improvement submitted");
-        setTitle("");
-        setDescription("");
-        setSite("");
-        setContact("");
+
+        if(title == "" || description == "" || site == "" || contact == "") {
+            alert("You need to add input to every field to submit");
+        } else {
+            await _sp.web.lists.getByTitle(LIST_NAME).items.add({
+                Title : title,
+                Description: description,
+                Site: site,
+                Contact: contact
+            }).then(i => {
+                console.log(i);
+            });
+            alert("Improvement submitted!\nThank you for helping us create an improved intranet!");
+            setTitle("");
+            setDescription("");
+            setSite("");
+            setContact("");
+        }
     }
 
     return(
