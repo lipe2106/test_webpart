@@ -11,7 +11,7 @@ import "@pnp/sp/items/get-all";
 import "@pnp/sp/lists/web"
 import {PrimaryButton} from 'office-ui-fabric-react/lib/Button';
 import { getSP } from '../../../pnpjsConfig';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { ImprovementForm } from '../../../interfaces';
 
 const Form = (props:IImprovementFormProps) => {
@@ -20,6 +20,10 @@ const Form = (props:IImprovementFormProps) => {
     let _sp: SPFI = getSP(props.context);
 
     const [formItems, setFormItems] = useState<ImprovementForm[]>([])
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [site, setSite] = useState("");
+    const [contact, setContact] = useState("");
 
     const getFormItems = async () => {
 
@@ -42,11 +46,15 @@ const Form = (props:IImprovementFormProps) => {
     const submit = async (e: any) => {
         e.preventDefault();
         console.log("Hej från submit!");
+        console.log("Title: " + title);
+        console.log("Descr: " + description);
+        console.log("Site: " + site);
+        console.log("Contact: " + contact);
         await _sp.web.lists.getByTitle("Intranet").items.add({
-            Title: "Nytt test",
-            Description: "Ny beskr",
-            Site: "Ny site",
-            Contact: "Test"
+            Title : title,
+            Description: description,
+            Site: site,
+            Contact: contact
         }).then(i => {
             console.log(i);
         });
@@ -66,10 +74,11 @@ const Form = (props:IImprovementFormProps) => {
                 <div>
                     <Label>Title</Label>
                     <TextField
-                       // value={this.state.Title}
                         id="Title"
                         placeholder='Title of your suggestion'
-                      //  onChange={this.onchange}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
+                        //onChange={e =>setName(e.target.value)}
+                        
                     />
                     <p></p>
                 </div>
@@ -80,6 +89,7 @@ const Form = (props:IImprovementFormProps) => {
                         id="Description"
                         placeholder='Description of the improvement suggestion'
                         multiline
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => setDescription(e.target.value)}
                       //  onChange={(e) => this.onchange(e)}
                     />
                     <p></p>
@@ -90,6 +100,7 @@ const Form = (props:IImprovementFormProps) => {
                      //   value={this.state.Site}
                         id="Site"
                         placeholder="Site URL to the page that's in need of improvement"
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => setSite(e.target.value)}
                       //  onChange={(e) => this.onchange(e)}
                     />
                     <p></p>
@@ -100,6 +111,7 @@ const Form = (props:IImprovementFormProps) => {
                      //   value={this.state.Contact}
                         id="Contact"
                         placeholder='Your name or email as contact information if we have further questions'
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => setContact(e.target.value)}
                      //   onChange={(e) => this.onchange(e)}
                     />
                     <p></p>
