@@ -1,47 +1,27 @@
 import * as React from 'react';
+import { ChangeEvent, useState } from 'react';
 import { IImprovementFormProps } from './IImprovementFormProps';
-import styles from './ImprovementForm.module.scss';
-import {TextField} from 'office-ui-fabric-react/lib/TextField';
-import {Label} from 'office-ui-fabric-react/lib/Label';
+import { getSP } from '../../../pnpjsConfig';
 import {SPFI} from '@pnp/sp/presets/all';
 import '@pnp/sp/webs';
 import '@pnp/sp/lists';
 import '@pnp/sp/items';
 import "@pnp/sp/items/get-all";
 import "@pnp/sp/lists/web"
+import styles from './ImprovementForm.module.scss';
+import {Label} from 'office-ui-fabric-react/lib/Label';
+import {TextField} from 'office-ui-fabric-react/lib/TextField';
 import {PrimaryButton} from 'office-ui-fabric-react/lib/Button';
-import { getSP } from '../../../pnpjsConfig';
-import { ChangeEvent, useEffect, useState } from 'react';
-import { ImprovementForm } from '../../../interfaces';
 
 const Form = (props:IImprovementFormProps) => {
 
     const LIST_NAME = "Intranet";
     let _sp: SPFI = getSP(props.context);
 
-    const [formItems, setFormItems] = useState<ImprovementForm[]>([])
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [site, setSite] = useState("");
     const [contact, setContact] = useState("");
-
-    const getFormItems = async () => {
-
-        console.log("Context: ", _sp);
-
-        const items = _sp.web.lists.getByTitle(LIST_NAME).items();
-
-        console.log("Form items: ", items)
-
-        setFormItems((await items).map((item: any) => {
-            return {
-                Title: item.Title, 
-                Description: item.Description,
-                Site: item.Site,
-                Contact: item.Contact
-            }
-        }));
-    }
 
     const submit = async (e: any) => {
         e.preventDefault();
@@ -50,7 +30,7 @@ const Form = (props:IImprovementFormProps) => {
         console.log("Descr: " + description);
         console.log("Site: " + site);
         console.log("Contact: " + contact);
-        await _sp.web.lists.getByTitle("Intranet").items.add({
+        await _sp.web.lists.getByTitle(LIST_NAME).items.add({
             Title : title,
             Description: description,
             Site: site,
@@ -59,60 +39,55 @@ const Form = (props:IImprovementFormProps) => {
             console.log(i);
         });
         alert("Improvement submitted");
+        setTitle("");
+        setDescription("");
+        setSite("");
+        setContact("");
     }
-
-    useEffect(() => {
-        getFormItems();
-    },[]);
 
     return(
         <div>
             <h1>Improvement Form</h1>
-            <pre>{JSON.stringify(formItems)}</pre>
             <p>Anything on the new intranet in need of an update, part of the page not working or something doesn't feel logical? Please send in an improvement suggestion and we will have a look. Thank you!</p>
             <form>
                 <div>
                     <Label>Title</Label>
                     <TextField
+                        value={title}
                         id="Title"
                         placeholder='Title of your suggestion'
                         onChange={(e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
-                        //onChange={e =>setName(e.target.value)}
-                        
                     />
                     <p></p>
                 </div>
                 <div>
                     <Label>Description</Label>
                     <TextField
-                      //  value={this.state.Description}
+                        value={description}
                         id="Description"
                         placeholder='Description of the improvement suggestion'
                         multiline
                         onChange={(e: ChangeEvent<HTMLInputElement>) => setDescription(e.target.value)}
-                      //  onChange={(e) => this.onchange(e)}
                     />
                     <p></p>
                 </div>
                 <div>
                     <Label>Site URL</Label>
                     <TextField
-                     //   value={this.state.Site}
+                        value={site}
                         id="Site"
                         placeholder="Site URL to the page that's in need of improvement"
                         onChange={(e: ChangeEvent<HTMLInputElement>) => setSite(e.target.value)}
-                      //  onChange={(e) => this.onchange(e)}
                     />
                     <p></p>
                 </div>
                 <div>
                     <Label>Contact Information</Label>
                     <TextField
-                     //   value={this.state.Contact}
+                        value={contact}
                         id="Contact"
                         placeholder='Your name or email as contact information if we have further questions'
                         onChange={(e: ChangeEvent<HTMLInputElement>) => setContact(e.target.value)}
-                     //   onChange={(e) => this.onchange(e)}
                     />
                     <p></p>
                 </div>
@@ -125,7 +100,6 @@ const Form = (props:IImprovementFormProps) => {
         </div>
     );
 }
-
 
 export default Form
 
